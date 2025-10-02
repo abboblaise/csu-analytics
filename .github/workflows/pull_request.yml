@@ -1,0 +1,10 @@
+on:
+  pull_request:
+    types: [opened, reopened]
+
+jobs:
+  call-frontend-integration:
+    uses: ./.github/workflows/frontend-integration.yml
+
+  call-backend-integration:
+    uses: ./.github/workflows/backend-integration.yml

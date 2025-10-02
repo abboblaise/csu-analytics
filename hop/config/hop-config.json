@@ -1,0 +1,20 @@
+{
+  "LocaleDefault": "en_US",
+  "projectsConfig": {
+    "enabled": true,
+    "projectMandatory": false,
+    "defaultEnvironment": "null",
+    "defaultProject": "default",
+    "standardParentProject": "default",
+    "projectConfigurations": [
+      {
+        "projectName": "default",
+        "projectHome": "config/projects/default",
+        "configFilename": "project-config.json"
+      }
+    ],
+    "lifecycleEnvironments": [],
+    "projectLifecycles": []
+  },
+  "variables": []
+}

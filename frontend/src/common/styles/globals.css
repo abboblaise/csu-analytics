@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #f3f4f6;
+  font-size: 15px;
+}
+
+.bg-prim {
+  background: #007b38;
+}
+
+.bg-prim-hover {
+  background-color: #f97315;
+}
+
+.text-prim {
+  color: #007b38;
+}
+
+.embed-iframe-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  justify-content: center;
+}
+
+.embed-iframe-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.dag-btn:hover {
+  color: white !important;
+}
+
+.ant-btn-primary,
+.bg-prim {
+  background-color: #31713b;
+}

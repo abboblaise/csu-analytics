@@ -1,0 +1,163 @@
+version: "3.4"
+
+## This overrides frontend on the docker-compose.yml file when running run.local.sh, this is done so the frontend local container
+## can be updated in real time while editing frontend code, it only needs to be restarted when changing the env variables
+services:
+  # ========
+  # Frontend
+  # ========
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+      target: dev
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      - "superset.igad.local:host-gateway"
+      - "backend.igad.local:host-gateway"
+    volumes:
+      - ./frontend/src/:/frontend/src
+    deploy:
+      resources:
+        limits:
+          memory: 1300M
+
+  superset:
+    container_name: superset
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      - "keycloak.igad.local:host-gateway"
+      - "frontend.igad.local:host-gateway"
+    command: [ "/usr/bin/repan-superset-startup.sh", "--dev" ]
+
+  # =====
+  #  Hop
+  # =====
+  hop:
+    container_name: hop
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      - "keycloak.igad.local:host-gateway"
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+
+  hop-server:
+    ports:
+      - "9999:8080"
+    deploy:
+      resources:
+        limits:
+          memory: 600M
+
+  # =====
+  #  Minio
+  # =====
+
+  storage:
+    container_name: storage
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      - "minio.igad.local:host-gateway"
+      - "keycloak.igad.local:host-gateway"
+    deploy:
+      resources:
+        limits:
+          memory: 600M
+
+  # ========
+  # Backend
+  # ========
+
+  backend:
+    container_name: backend
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./backend/:/backend
+      - ./backend/rest_framework_swagger/index.html:/usr/local/lib/python3.9/site-packages/rest_framework_swagger/templates/rest_framework_swagger/index.html
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      - "keycloak.igad.local:host-gateway"
+    deploy:
+      resources:
+        limits:
+          memory: 300M
+
+  # ========
+  # Airflow
+  # ========
+
+  airflow-webserver:
+    container_name: airflow-webserver
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      - "keycloak.igad.local:host-gateway"
+    deploy:
+      resources:
+        limits:
+          memory: 900M
+
+  airflow-scheduler:
+    deploy:
+      resources:
+        limits:
+          memory: 900M
+
+  airflow-triggerer:
+    deploy:
+      resources:
+        limits:
+          memory: 600M
+
+  airflow-pg:
+    deploy:
+      resources:
+        limits:
+          memory: 200M
+
+  # =====
+  #  Keycloak
+  # =====
+  keycloak:
+    deploy:
+      resources:
+        limits:
+          memory: 600M
+  keycloak-pg:
+    deploy:
+      resources:
+        limits:
+          memory: 200M
+
+  # =====
+  #  Superset
+  # =====
+  superset_cache:
+    deploy:
+      resources:
+        limits:
+          memory: 30M
+  superset_db:
+    deploy:
+      resources:
+        limits:
+          memory: 200M
+
+  # =====
+  #  Nginx
+  # =====
+  nginx:
+    deploy:
+      resources:
+        limits:
+          memory: 200M
+
+  # =====
+  #  ClamAV
+  # =====
+  clamav:
+    deploy:
+      resources:
+        limits:
+          memory: 4GB

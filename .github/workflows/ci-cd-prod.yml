@@ -1,0 +1,29 @@
+name: Build Pipeline
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  call-frontend-integration:
+    uses: ./.github/workflows/frontend-integration.yml
+
+  call-backend-integration:
+    uses: ./.github/workflows/backend-integration.yml
+
+  deploy-prod:
+    name: Deploy
+    runs-on: devserver
+    needs: [call-frontend-integration, call-backend-integration]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Connect to server and deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_PROD }}
+          username: ${{ secrets.USERNAME_PROD }}
+          password: ${{ secrets.PASSWORD_PROD }}
+          script: |
+            cd Regional-Pandemic-Analytics/
+            git pull
+            make start-prod

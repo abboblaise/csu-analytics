@@ -1,0 +1,7 @@
+node_modules
+yarn.lock
+.next
+.env
+next-env.d.ts
+public/charts
+public/books
