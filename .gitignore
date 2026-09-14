@@ -14,3 +14,7 @@ __pycache__/
 # Node caches
 .next/
 node_modules/
+
+# Druid storage
+storage/indexing-logs/
+storage/segments/
