@@ -440,6 +440,7 @@ services:
   hop:
     build: ./hop
     container_name: hop
+    restart: always
     ports:
       - "8084:8080"
     user: "0:1000"
@@ -466,6 +467,7 @@ services:
   hop-server:
     image: apache/hop:2.11.0
     container_name: hop-server
+    restart: always
     environment:
       HOP_SERVER_USER: ${HOP_SERVER_USER}
       HOP_SERVER_PASS: ${HOP_SERVER_PASS}
