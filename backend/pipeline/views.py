@@ -269,13 +269,17 @@ class PipelineUploadView(APIView):
         description = request.data.get("description")
         uploaded_file = request.FILES.get("uploadedFile")
 
-        cd = pyclamd.ClamdNetworkSocket(host="clamav", port=3310)
-        scan_result = cd.scan_stream(uploaded_file.read())
-        if scan_result is not None:
-            logging.error(f"Malicious Pipeline uploaded : {scan_result}")
-            return Response({'errorMessage': f'Malicious File Upload: {scan_result}'}, status=status.HTTP_400_BAD_REQUEST)
-        # seeking to 0 in the uploaded_file because scan_stream does not release the pointer 
-        uploaded_file.seek(0)
+        try:
+            cd = pyclamd.ClamdNetworkSocket(host=os.getenv("CLAMAV_HOST", "clamav"), port=int(os.getenv("CLAMAV_PORT", 3310)))
+            scan_result = cd.scan_stream(uploaded_file.read())
+            if scan_result is not None:
+                logging.error(f"Malicious Pipeline uploaded : {scan_result}")
+                return Response({'errorMessage': f'Malicious File Upload: {scan_result}', 'message': f'Malicious File Upload: {scan_result}'}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as err:
+            logging.warning(f"ClamAV scan skipped or unreachable: {err}")
+        finally:
+            # seeking to 0 in the uploaded_file because scan_stream does not release the pointer 
+            uploaded_file.seek(0)
 
         if not self.permitted_characters_regex.search(name):
             return Response(
@@ -355,14 +359,17 @@ class PipelineUploadExternalFilesView(APIView):
         local_save_path = f"/hop/pipelines/external_files/{name}{file_extension}"
 
         # Scan the file for viruses
-        cd = pyclamd.ClamdNetworkSocket(host="clamav", port=3310)
-        scan_result = cd.scan_stream(uploaded_file.read())
-        if scan_result is not None:
-            logging.error(f"Malicious Pipeline uploaded: {scan_result}")
-            return Response({'errorMessage': f'Malicious File Upload: {scan_result}'}, status=status.HTTP_400_BAD_REQUEST)
-
-        # Reset the file pointer after scanning
-        uploaded_file.seek(0)
+        try:
+            cd = pyclamd.ClamdNetworkSocket(host=os.getenv("CLAMAV_HOST", "clamav"), port=int(os.getenv("CLAMAV_PORT", 3310)))
+            scan_result = cd.scan_stream(uploaded_file.read())
+            if scan_result is not None:
+                logging.error(f"Malicious Pipeline uploaded: {scan_result}")
+                return Response({'errorMessage': f'Malicious File Upload: {scan_result}', 'message': f'Malicious File Upload: {scan_result}'}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as err:
+            logging.warning(f"ClamAV scan skipped or unreachable: {err}")
+        finally:
+            # Reset the file pointer after scanning
+            uploaded_file.seek(0)
 
         # Check for unpermitted characters in the name
         if not self.permitted_characters_regex.search(name):

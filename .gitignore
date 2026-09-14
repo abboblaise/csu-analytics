@@ -1,0 +1,16 @@
+# Certbot live certs and keys
+certbot/conf/live/*
+!certbot/conf/live/.gitkeep
+certbot/conf/archive/*
+!certbot/conf/archive/.gitkeep
+certbot/conf/renewal/*
+!certbot/conf/renewal/.gitkeep
+
+# Python caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Node caches
+.next/
+node_modules/

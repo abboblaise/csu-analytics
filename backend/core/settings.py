@@ -26,7 +26,12 @@ CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = []
 CORS_ALLOWED_ORIGINS = [
-    "https://data.sivadcsu.minsante.cm"
+    "https://home.psfpad.com",
+    "http://home.psfpad.com:8085",
+    "https://home.psfpad.com:8085",
+    "http://home.psfpad.com",
+    "http://localhost:8085",
+    "http://localhost:3000",
 ]
 CORS_ALLOWED_METHODS = [
     'DELETE',
@@ -186,7 +191,12 @@ REST_FRAMEWORK = {
 
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://data.sivadcsu.minsante.cm"
+    "https://home.psfpad.com",
+    "http://home.psfpad.com:8085",
+    "https://home.psfpad.com:8085",
+    "http://home.psfpad.com",
+    "http://localhost:8085",
+    "http://localhost:3000",
 ]
 
 # Excempt list - URL paths that doesn't need Keycloak Authorization

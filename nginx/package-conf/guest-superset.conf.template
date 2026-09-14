@@ -30,8 +30,8 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-Host $host;
         proxy_set_header X-Forwarded-Server $host;
-        proxy_set_header X-Forwarded-Port $server_port;
-        proxy_set_header X-Forwarded-Proto $scheme;  
+        proxy_set_header X-Forwarded-Port $NGINX_SERVER_PORT;
+        proxy_set_header X-Forwarded-Proto $NGINX_SCHEME;  
 		proxy_pass http://$NGINX_UPSTREAM_SUPERSET:8088/;
 		error_log /var/log/superset_errors.log;
 	}

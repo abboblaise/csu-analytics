@@ -5,7 +5,7 @@
   "public-client": false,
   "use-resource-role-mappings": true,
   "redirect-rewrite-rules": {
-    "^/(.*)$": "/hop"
+    "^/": "/hop/"
   },
   "credentials": {
     "secret": "${HOP_KEYCLOAK_CLIENT_SECRET}"

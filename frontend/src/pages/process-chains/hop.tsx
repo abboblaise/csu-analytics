@@ -7,7 +7,7 @@ const { publicRuntimeConfig } = getConfig();
 export default function ProcessChains() {
   return (
     <Layout>
-      <iframe src={publicRuntimeConfig.NEXT_HOP_UI} />
+      <iframe src={publicRuntimeConfig.NEXT_PUBLIC_HOP_UI} />
     </Layout>
   );
 }

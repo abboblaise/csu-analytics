@@ -17,8 +17,14 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-Host $host;
         proxy_set_header X-Forwarded-Server $host;
-        proxy_set_header X-Forwarded-Port $server_port;
-        proxy_set_header X-Forwarded-Proto $scheme;       
+        proxy_set_header X-Forwarded-Port $NGINX_SERVER_PORT;
+        proxy_set_header X-Forwarded-Proto $NGINX_SCHEME;       
+        proxy_buffer_size 128k;
+        proxy_buffers 4 256k;
+        proxy_busy_buffers_size 256k;
+        proxy_hide_header X-Frame-Options;
+        proxy_hide_header Content-Security-Policy;
+        add_header Content-Security-Policy "frame-ancestors 'self' https://home.psfpad.com https://*.psfpad.com;" always;
         proxy_pass http://$NGINX_UPSTREAM_KEYCLOAK:8080;
 		error_log /var/log/keycloak_errors.log;
     }
@@ -42,8 +48,14 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-Host $host;
         proxy_set_header X-Forwarded-Server $host;
-        proxy_set_header X-Forwarded-Port $server_port;
-        proxy_set_header X-Forwarded-Proto $scheme;       
+        proxy_set_header X-Forwarded-Port $NGINX_SERVER_PORT;
+        proxy_set_header X-Forwarded-Proto $NGINX_SCHEME;       
+        proxy_buffer_size 128k;
+        proxy_buffers 4 256k;
+        proxy_busy_buffers_size 256k;
+        proxy_hide_header X-Frame-Options;
+        proxy_hide_header Content-Security-Policy;
+        add_header Content-Security-Policy "frame-ancestors 'self' https://home.psfpad.com https://*.psfpad.com;" always;
         proxy_pass http://$NGINX_UPSTREAM_KEYCLOAK:8080;
 		error_log /var/log/keycloak_errors.log;
     }

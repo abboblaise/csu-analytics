@@ -2124,7 +2124,12 @@
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "secret": "${SUPERSET_KEYCLOAK_CLIENT_SECRET}",
-      "redirectUris": ["${SUPERSET_ROOT_URL}/oauth-authorized/keycloak"],
+      "redirectUris": [
+        "${SUPERSET_ROOT_URL}/oauth-authorized/keycloak",
+        "https://${NGINX_SUPERSET_DOMAIN_NAME}/oauth-authorized/keycloak",
+        "http://${NGINX_SUPERSET_DOMAIN_NAME}/oauth-authorized/keycloak",
+        "https://${NGINX_SUPERSET_DOMAIN_NAME}/*"
+      ],
       "webOrigins": ["${SUPERSET_ROOT_URL}"],
       "notBefore": 0,
       "bearerOnly": false,
@@ -2695,8 +2700,8 @@
     "contentSecurityPolicyReportOnly": "",
     "xContentTypeOptions": "nosniff",
     "xRobotsTag": "none",
-    "xFrameOptions": "SAMEORIGIN",
-    "contentSecurityPolicy": "frame-src 'self'; frame-ancestors 'self'; object-src 'none';",
+    "xFrameOptions": "",
+    "contentSecurityPolicy": "frame-src 'self'; frame-ancestors 'self' https://home.psfpad.com https://*.psfpad.com; object-src 'none';",
     "xXSSProtection": "1; mode=block",
     "strictTransportSecurity": "max-age=31536000; includeSubDomains"
   },

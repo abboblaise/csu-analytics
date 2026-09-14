@@ -188,8 +188,8 @@ class GetFavoriteStatus(SupersetAPI):
         """
         Endpoint for getting dashboard favorite status for the current user
         """
-        if query == '[]' or query == None:
-            return Response({"result": "No favorite dashboard were provided"}, status=status.HTTP_400_BAD_REQUEST)
+        if query == '[]' or query is None:
+            return Response({"result": []}, status=status.HTTP_200_OK)
 
         url = f"{os.getenv('SUPERSET_BASE_URL')}/dashboard/favorite_status/?q={query}"
         headers = self.authorize({})

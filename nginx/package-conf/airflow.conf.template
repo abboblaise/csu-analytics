@@ -8,7 +8,16 @@ server {
 	}
 
 	location / {
-		return 301 https://$host$request_uri;
+		proxy_set_header Host                    $host;
+    	proxy_set_header X-Real-IP               $remote_addr;
+    	proxy_set_header X-Forwarded-For         $proxy_add_x_forwarded_for;
+    	proxy_set_header X-Forwarded-Proto       $NGINX_SCHEME;
+    	proxy_set_header X-Forwarded-Port        $NGINX_SERVER_PORT;
+    	proxy_set_header X-Scheme                $NGINX_SCHEME;
+    	proxy_set_header X-Auth-Request-Redirect $request_uri;
+		proxy_set_header X-Auth-Request-Redirect $NGINX_SCHEME://$host$request_uri;
+		proxy_pass http://$NGINX_UPSTREAM_AIRFLOW:8080/;
+		error_log /var/log/airflow_end_errors.log;
 	}
 }
 
@@ -24,9 +33,12 @@ server {
 	location / {
 		proxy_set_header Host                    $host;
     	proxy_set_header X-Real-IP               $remote_addr;
-    	proxy_set_header X-Scheme                $scheme;
+    	proxy_set_header X-Forwarded-For         $proxy_add_x_forwarded_for;
+    	proxy_set_header X-Forwarded-Proto       $NGINX_SCHEME;
+    	proxy_set_header X-Forwarded-Port        $NGINX_SERVER_PORT;
+    	proxy_set_header X-Scheme                $NGINX_SCHEME;
     	proxy_set_header X-Auth-Request-Redirect $request_uri;
-		proxy_set_header X-Auth-Request-Redirect $scheme://$host$request_uri;
+		proxy_set_header X-Auth-Request-Redirect $NGINX_SCHEME://$host$request_uri;
 		proxy_pass http://$NGINX_UPSTREAM_AIRFLOW:8080/;
 		error_log /var/log/airflow_end_errors.log;
 	}
