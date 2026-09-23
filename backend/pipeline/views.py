@@ -2,6 +2,7 @@ import os
 import json
 import re
 import requests
+import tempfile
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -269,17 +270,25 @@ class PipelineUploadView(APIView):
         description = request.data.get("description")
         uploaded_file = request.FILES.get("uploadedFile")
 
+        # ClamAV scan – use scan_file on a temporary copy for compatibility with different pyclamd / ClamAV versions
         try:
             cd = pyclamd.ClamdNetworkSocket(host=os.getenv("CLAMAV_HOST", "clamav"), port=int(os.getenv("CLAMAV_PORT", 3310)))
-            scan_result = cd.scan_stream(uploaded_file.read())
-            if scan_result is not None:
+            # ping to ensure daemon is reachable
+            try:
+                cd.ping()
+            except Exception:
+                raise
+            # scan uploaded file using stream to avoid needing shared filesystem between containers
+            uploaded_file.seek(0)
+            scan_result = cd.scan_stream(uploaded_file)
+            uploaded_file.seek(0)
+            if scan_result:
                 logging.error(f"Malicious Pipeline uploaded : {scan_result}")
                 return Response({'errorMessage': f'Malicious File Upload: {scan_result}', 'message': f'Malicious File Upload: {scan_result}'}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as err:
             logging.warning(f"ClamAV scan skipped or unreachable: {err}")
-        finally:
-            # seeking to 0 in the uploaded_file because scan_stream does not release the pointer 
-            uploaded_file.seek(0)
+        # ensure file pointer is at start for later processing
+        uploaded_file.seek(0)
 
         if not self.permitted_characters_regex.search(name):
             return Response(
@@ -358,18 +367,22 @@ class PipelineUploadExternalFilesView(APIView):
         
         local_save_path = f"/hop/pipelines/external_files/{name}{file_extension}"
 
-        # Scan the file for viruses
+        # Scan the file for viruses – use scan_file on a temporary copy for compatibility
         try:
             cd = pyclamd.ClamdNetworkSocket(host=os.getenv("CLAMAV_HOST", "clamav"), port=int(os.getenv("CLAMAV_PORT", 3310)))
-            scan_result = cd.scan_stream(uploaded_file.read())
-            if scan_result is not None:
+            try:
+                cd.ping()
+            except Exception:
+                raise
+            uploaded_file.seek(0)
+            scan_result = cd.scan_stream(uploaded_file)
+            uploaded_file.seek(0)
+            if scan_result:
                 logging.error(f"Malicious Pipeline uploaded: {scan_result}")
                 return Response({'errorMessage': f'Malicious File Upload: {scan_result}', 'message': f'Malicious File Upload: {scan_result}'}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as err:
             logging.warning(f"ClamAV scan skipped or unreachable: {err}")
-        finally:
-            # Reset the file pointer after scanning
-            uploaded_file.seek(0)
+        uploaded_file.seek(0)
 
         # Check for unpermitted characters in the name
         if not self.permitted_characters_regex.search(name):

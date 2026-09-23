@@ -89,7 +89,7 @@
           "client": {
             "superset": ["superset_admin"],
             "airflow": ["airflow_admin"],
-            "${BACKEND_CLIENT_ID}": ["me_expert_role"]
+            "frontend": ["me_expert_role"]
           }
         },
         "clientRole": false,
@@ -105,7 +105,7 @@
           "client": {
             "superset": ["superset_gamma"],
             "airflow": ["airflow_admin"],
-            "${BACKEND_CLIENT_ID}": ["dho_role", "admin"]
+            "frontend": ["dho_role", "admin"]
           }
         },
         "clientRole": false,
@@ -122,7 +122,7 @@
             "realm-management": ["realm-admin"],
             "superset": ["superset_admin"],
             "airflow": ["airflow_admin"],
-            "${BACKEND_CLIENT_ID}": ["admin"]
+            "frontend": ["admin"]
           }
         },
         "clientRole": false,
@@ -503,7 +503,7 @@
       ],
       "admin-cli": [],
       "account-console": [],
-      "${BACKEND_CLIENT_ID}": [
+      "frontend": [
         {
           "id": "f4f3058f-b50d-4d41-b4bb-f2045fbb25c4",
           "name": "me_expert_role",
@@ -960,8 +960,8 @@
     },
     {
       "id": "577fbdfe-f66d-4c21-adae-9f215c245f45",
-      "clientId": "${AIRFLOW_KEYCLOAK_CLIENT_ID}",
-      "name": "${AIRFLOW_KEYCLOAK_CLIENT_ID}",
+      "clientId": "airflow",
+      "name": "airflow",
       "description": "",
       "rootUrl": "",
       "adminUrl": "",
@@ -970,10 +970,10 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "${AIRFLOW_KEYCLOAK_CLIENT_SECRET}",
+      "secret": "7zpApqv5TjB7Mt7hB66aRUfsAfyMTC5U",
       "redirectUris": [
-        "http://${NGINX_AIRFLOW_DOMAIN_NAME}/*",
-        "https://${NGINX_AIRFLOW_DOMAIN_NAME}/*"
+        "http://orchestration.sivadcsu.minsante.cm/*",
+        "https://orchestration.sivadcsu.minsante.cm/*"
       ],
       "webOrigins": [],
       "notBefore": 0,
@@ -1126,15 +1126,15 @@
       "clientId": "${MINIO_KEYCLOAK_CLIENT_ID}",
       "name": "",
       "description": "",
-      "rootUrl": "${MINIO_KEYCLOAK_ROOT_URL}",
+      "rootUrl": "https://console.cache.sivadcsu.minsante.cm/",
       "adminUrl": "",
-      "baseUrl": "${MINIO_KEYCLOAK_ROOT_URL}",
+      "baseUrl": "https://console.cache.sivadcsu.minsante.cm/",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": true,
       "clientAuthenticatorType": "client-secret",
       "secret": "${MINIO_KEYCLOAK_SECRET}",
-      "redirectUris": ["${MINIO_KEYCLOAK_ROOT_URL}*"],
+      "redirectUris": ["https://console.cache.sivadcsu.minsante.cm/*"],
       "webOrigins": [],
       "notBefore": 0,
       "bearerOnly": false,
@@ -1360,7 +1360,7 @@
             "logic": "POSITIVE",
             "decisionStrategy": "UNANIMOUS",
             "config": {
-              "clients": "[\"airflow\", \"${BACKEND_CLIENT_ID}\"]"
+              "clients": "[\"airflow\", \"frontend\"]"
             }
           },
           {
@@ -1776,19 +1776,19 @@
     },
     {
       "id": "124138ae-d2f7-4d57-803c-4d239ba05e12",
-      "clientId": "${BACKEND_CLIENT_ID}",
+      "clientId": "frontend",
       "name": "Repan Staging",
       "description": "",
-      "rootUrl": "${BACKEND_PUBLIC_URL}",
+      "rootUrl": "https://home.sivadcsu.minsante.cm",
       "adminUrl": "",
-      "baseUrl": "${BACKEND_PUBLIC_URL}",
+      "baseUrl": "https://home.sivadcsu.minsante.cm",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "${BACKEND_CLIENT_SECRET}",
-      "redirectUris": ["${BACKEND_PUBLIC_URL}/*"],
-      "webOrigins": ["${BACKEND_PUBLIC_URL}"],
+      "secret": "k3XJs31gjgWZgWjGHZRp4KxrDSeYP33j",
+      "redirectUris": ["https://home.sivadcsu.minsante.cm/*"],
+      "webOrigins": ["https://home.sivadcsu.minsante.cm"],
       "notBefore": 0,
       "bearerOnly": false,
       "consentRequired": false,
@@ -1804,7 +1804,7 @@
         "oidc.ciba.grant.enabled": "false",
         "client.secret.creation.time": "1686753393",
         "backchannel.logout.session.required": "true",
-        "post.logout.redirect.uris": "${BACKEND_PUBLIC_URL}/*",
+        "post.logout.redirect.uris": "https://home.sivadcsu.minsante.cm/*",
         "display.on.consent.screen": "false",
         "oauth2.device.authorization.grant.enabled": "false",
         "backchannel.logout.revoke.offline.tokens": "false"
@@ -1879,7 +1879,7 @@
             "logic": "POSITIVE",
             "decisionStrategy": "UNANIMOUS",
             "config": {
-              "roles": "[{\"id\":\"${BACKEND_CLIENT_ID}/admin\",\"required\":true}]"
+              "roles": "[{\"id\":\"frontend/admin\",\"required\":true}]"
             }
           },
           {
@@ -1890,7 +1890,7 @@
             "logic": "POSITIVE",
             "decisionStrategy": "UNANIMOUS",
             "config": {
-              "roles": "[{\"id\":\"${BACKEND_CLIENT_ID}/user\",\"required\":false}]"
+              "roles": "[{\"id\":\"frontend/user\",\"required\":false}]"
             }
           },
           {
@@ -1901,7 +1901,7 @@
             "logic": "POSITIVE",
             "decisionStrategy": "UNANIMOUS",
             "config": {
-              "roles": "[{\"id\":\"${BACKEND_CLIENT_ID}/dho_role\",\"required\":false}]"
+              "roles": "[{\"id\":\"frontend/dho_role\",\"required\":false}]"
             }
           },
           {
@@ -1912,7 +1912,7 @@
             "logic": "POSITIVE",
             "decisionStrategy": "UNANIMOUS",
             "config": {
-              "roles": "[{\"id\":\"${BACKEND_CLIENT_ID}/me_expert_role\",\"required\":false}]"
+              "roles": "[{\"id\":\"frontend/me_expert_role\",\"required\":false}]"
             }
           },
           {
@@ -2113,24 +2113,24 @@
       }
     },
     {
-      "clientId": "${SUPERSET_KEYCLOAK_CLIENT_ID}",
+      "clientId": "superset",
       "name": "superset",
       "description": "",
-      "rootUrl": "${SUPERSET_ROOT_URL}",
-      "adminUrl": "${SUPERSET_ROOT_URL}",
-      "baseUrl": "${SUPERSET_ROOT_URL}",
+      "rootUrl": "https://analytics.sivadcsu.minsante.cm",
+      "adminUrl": "https://analytics.sivadcsu.minsante.cm",
+      "baseUrl": "https://analytics.sivadcsu.minsante.cm",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "${SUPERSET_KEYCLOAK_CLIENT_SECRET}",
+      "secret": "LmY5vXE9gqU4JzP2wRfKa1tNvGiCM0uQ",
       "redirectUris": [
-        "${SUPERSET_ROOT_URL}/oauth-authorized/keycloak",
-        "https://${NGINX_SUPERSET_DOMAIN_NAME}/oauth-authorized/keycloak",
-        "http://${NGINX_SUPERSET_DOMAIN_NAME}/oauth-authorized/keycloak",
-        "https://${NGINX_SUPERSET_DOMAIN_NAME}/*"
+        "https://analytics.sivadcsu.minsante.cm/oauth-authorized/keycloak",
+        "https://analytics.sivadcsu.minsante.cm/oauth-authorized/keycloak",
+        "http://analytics.sivadcsu.minsante.cm/oauth-authorized/keycloak",
+        "https://analytics.sivadcsu.minsante.cm/*"
       ],
-      "webOrigins": ["${SUPERSET_ROOT_URL}"],
+      "webOrigins": ["https://analytics.sivadcsu.minsante.cm"],
       "notBefore": 0,
       "bearerOnly": false,
       "consentRequired": false,
@@ -2145,11 +2145,11 @@
         "oidc.ciba.grant.enabled": "false",
         "client.secret.creation.time": "1674028783",
         "backchannel.logout.session.required": "true",
-        "post.logout.redirect.uris": "${SUPERSET_ROOT_URL}/login/",
+        "post.logout.redirect.uris": "https://analytics.sivadcsu.minsante.cm/login/",
         "display.on.consent.screen": "false",
         "oauth2.device.authorization.grant.enabled": "false",
         "backchannel.logout.revoke.offline.tokens": "false",
-        "frontchannel.logout.url": "${SUPERSET_ROOT_URL}/backchannel-logout/"
+        "frontchannel.logout.url": "https://analytics.sivadcsu.minsante.cm/backchannel-logout/"
       },
       "authenticationFlowBindingOverrides": {},
       "fullScopeAllowed": true,
@@ -2711,7 +2711,7 @@
     "auth": "true",
     "envelopeFrom": "",
     "ssl": "false",
-    "password": "${BACKEND_MAIL_PASSWORD}",
+    "password": "",
     "port": "587",
     "replyTo": "",
     "host": "smtp.gmail.com",

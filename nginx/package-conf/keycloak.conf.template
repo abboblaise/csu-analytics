@@ -1,6 +1,7 @@
 # IGAD keycloak config
 server {
     listen          80;
+    listen          443;
     server_name     $NGINX_KEYCLOAK_DOMAIN_NAME;
 
 
@@ -15,8 +16,8 @@ server {
         proxy_set_header Host $http_host;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-Host $host;
-        proxy_set_header X-Forwarded-Server $host;
+        proxy_set_header X-Forwarded-Host $http_host;
+        proxy_set_header X-Forwarded-Server $http_host;
         proxy_set_header X-Forwarded-Port $NGINX_SERVER_PORT;
         proxy_set_header X-Forwarded-Proto $NGINX_SCHEME;       
         proxy_buffer_size 128k;
@@ -24,39 +25,40 @@ server {
         proxy_busy_buffers_size 256k;
         proxy_hide_header X-Frame-Options;
         proxy_hide_header Content-Security-Policy;
-        add_header Content-Security-Policy "frame-ancestors 'self' https://home.psfpad.com https://*.psfpad.com;" always;
+        add_header Content-Security-Policy "frame-ancestors 'self' https://home.sivadcsu.minsante.cm https://*.sivadcsu.minsante.cm;" always;
         proxy_pass http://$NGINX_UPSTREAM_KEYCLOAK:8080;
 		error_log /var/log/keycloak_errors.log;
     }
 }
 
-server {
-	listen 443 ssl;
-	server_name $NGINX_KEYCLOAK_DOMAIN_NAME;
-
-	ssl_certificate /etc/letsencrypt/live/$NGINX_KEYCLOAK_DOMAIN_NAME/fullchain.pem;
-	ssl_certificate_key /etc/letsencrypt/live/$NGINX_KEYCLOAK_DOMAIN_NAME/privkey.pem;
-	include /etc/letsencrypt/options-ssl-nginx.conf;
-	ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
-
-	location / {
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "upgrade";
-        proxy_set_header Host $http_host;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-Host $host;
-        proxy_set_header X-Forwarded-Server $host;
-        proxy_set_header X-Forwarded-Port $NGINX_SERVER_PORT;
-        proxy_set_header X-Forwarded-Proto $NGINX_SCHEME;       
-        proxy_buffer_size 128k;
-        proxy_buffers 4 256k;
-        proxy_busy_buffers_size 256k;
-        proxy_hide_header X-Frame-Options;
-        proxy_hide_header Content-Security-Policy;
-        add_header Content-Security-Policy "frame-ancestors 'self' https://home.psfpad.com https://*.psfpad.com;" always;
-        proxy_pass http://$NGINX_UPSTREAM_KEYCLOAK:8080;
-		error_log /var/log/keycloak_errors.log;
-    }
-}
+# SSL disabled for dev mode - uncomment for production
+# server {
+# 	listen 443 ssl;
+# 	server_name $NGINX_KEYCLOAK_DOMAIN_NAME;
+#
+# 	ssl_certificate /etc/letsencrypt/live/$NGINX_KEYCLOAK_DOMAIN_NAME/fullchain.pem;
+# 	ssl_certificate_key /etc/letsencrypt/live/$NGINX_KEYCLOAK_DOMAIN_NAME/privkey.pem;
+# 	include /etc/letsencrypt/options-ssl-nginx.conf;
+# 	ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+#
+# 	location / {
+#         proxy_http_version 1.1;
+#         proxy_set_header Upgrade $http_upgrade;
+#         proxy_set_header Connection "upgrade";
+#         proxy_set_header Host $http_host;
+#         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#         proxy_set_header X-Real-IP $remote_addr;
+#         proxy_set_header X-Forwarded-Host $host;
+#         proxy_set_header X-Forwarded-Server $host;
+#         proxy_set_header X-Forwarded-Port $NGINX_SERVER_PORT;
+#         proxy_set_header X-Forwarded-Proto $NGINX_SCHEME;       
+#         proxy_buffer_size 128k;
+#         proxy_buffers 4 256k;
+#         proxy_busy_buffers_size 256k;
+#         proxy_hide_header X-Frame-Options;
+#         proxy_hide_header Content-Security-Policy;
+#         add_header Content-Security-Policy "frame-ancestors 'self' https://home.sivadcsu.minsante.cm https://*.sivadcsu.minsante.cm;" always;
+#         proxy_pass http://$NGINX_UPSTREAM_KEYCLOAK:8080;
+# 		error_log /var/log/keycloak_errors.log;
+#     }
+# }

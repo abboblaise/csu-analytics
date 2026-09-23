@@ -21,25 +21,26 @@ server {
 	}
 }
 
-server {
-	listen 443 ssl;
-	server_name $NGINX_AIRFLOW_DOMAIN_NAME;
-
-	ssl_certificate /etc/letsencrypt/live/$NGINX_AIRFLOW_DOMAIN_NAME/fullchain.pem;
-	ssl_certificate_key /etc/letsencrypt/live/$NGINX_AIRFLOW_DOMAIN_NAME/privkey.pem;
-	include /etc/letsencrypt/options-ssl-nginx.conf;
-	ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
-
-	location / {
-		proxy_set_header Host                    $host;
-    	proxy_set_header X-Real-IP               $remote_addr;
-    	proxy_set_header X-Forwarded-For         $proxy_add_x_forwarded_for;
-    	proxy_set_header X-Forwarded-Proto       $NGINX_SCHEME;
-    	proxy_set_header X-Forwarded-Port        $NGINX_SERVER_PORT;
-    	proxy_set_header X-Scheme                $NGINX_SCHEME;
-    	proxy_set_header X-Auth-Request-Redirect $request_uri;
-		proxy_set_header X-Auth-Request-Redirect $NGINX_SCHEME://$host$request_uri;
-		proxy_pass http://$NGINX_UPSTREAM_AIRFLOW:8080/;
-		error_log /var/log/airflow_end_errors.log;
-	}
-}
+# SSL disabled for dev mode - uncomment for production
+# server {
+# 	listen 443 ssl;
+# 	server_name $NGINX_AIRFLOW_DOMAIN_NAME;
+#
+# 	ssl_certificate /etc/letsencrypt/live/$NGINX_AIRFLOW_DOMAIN_NAME/fullchain.pem;
+# 	ssl_certificate_key /etc/letsencrypt/live/$NGINX_AIRFLOW_DOMAIN_NAME/privkey.pem;
+# 	include /etc/letsencrypt/options-ssl-nginx.conf;
+# 	ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+#
+# 	location / {
+# 		proxy_set_header Host                    $host;
+#     	proxy_set_header X-Real-IP               $remote_addr;
+#     	proxy_set_header X-Forwarded-For         $proxy_add_x_forwarded_for;
+#     	proxy_set_header X-Forwarded-Proto       $NGINX_SCHEME;
+#     	proxy_set_header X-Forwarded-Port        $NGINX_SERVER_PORT;
+#     	proxy_set_header X-Scheme                $NGINX_SCHEME;
+#     	proxy_set_header X-Auth-Request-Redirect $request_uri;
+# 		proxy_set_header X-Auth-Request-Redirect $NGINX_SCHEME://$host$request_uri;
+# 		proxy_pass http://$NGINX_UPSTREAM_AIRFLOW:8080/;
+# 		error_log /var/log/airflow_end_errors.log;
+# 	}
+# }

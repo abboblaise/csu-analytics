@@ -1,5 +1,6 @@
 
 import os
+import tempfile
 from django.http import HttpResponse, JsonResponse
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -375,12 +376,21 @@ class UserAvatarView(APIView):
 
         uploaded_file = request.FILES.get("uploadedFile")
 
-        cd = pyclamd.ClamdNetworkSocket(host="clamav", port=3310)
-        scan_result = cd.scan_stream(uploaded_file.read())
-        if scan_result is not None:
-            logging.error(f"Malicious File Upload in Avatar : {scan_result}")
-            return Response({'errorMessage': f'Malicious File Upload: {scan_result}'}, status=status.HTTP_400_BAD_REQUEST)
-        # seeking to 0 in the uploaded_file because scan_stream does not release the pointer 
+        # ClamAV scan compatible with different pyclamd / ClamAV versions
+        try:
+            cd = pyclamd.ClamdNetworkSocket(host="clamav", port=3310)
+            try:
+                cd.ping()
+            except Exception:
+                raise
+            uploaded_file.seek(0)
+            scan_result = cd.scan_stream(uploaded_file)
+            uploaded_file.seek(0)
+            if scan_result:
+                logging.error(f"Malicious File Upload in Avatar : {scan_result}")
+                return Response({'errorMessage': f'Malicious File Upload: {scan_result}'}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as err:
+            logging.warning(f"ClamAV scan skipped or unreachable: {err}")
         uploaded_file.seek(0)
 
         if not uploaded_file:

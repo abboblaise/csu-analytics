@@ -38,8 +38,7 @@ export const UploadExternalFiles = ({
     formData.append('uploadedFile', file, file.name);
     uploadExternalFiles(formData).then((res: any) => {
       if (res.error) {
-        const { data } = res.error;
-        const { message } = data;
+        const message = res.error?.data?.message || 'Failed to upload file';
         toast.error(message, { position: 'top-right' });
         return;
       }

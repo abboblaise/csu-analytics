@@ -31,9 +31,7 @@ export const AddPipeline = ({
   const onFinish = (value: any) => {
     addPipeline({ ...value, template: template.name }).then((res: any) => {
       if (res.error) {
-        const { data } = res.error;
-        const { message } = data;
-
+        const message = res.error?.data?.message || 'Failed to create pipeline';
         toast.error(message, { position: 'top-right' });
         return;
       }

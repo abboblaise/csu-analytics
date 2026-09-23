@@ -22,42 +22,43 @@ server {
     	proxy_set_header X-Scheme                $NGINX_SCHEME;
 		proxy_set_header X-Forwarded-For         $proxy_add_x_forwarded_for;
     	proxy_set_header X-Forwarded-Proto       $NGINX_SCHEME;
-		proxy_set_header X-Forwarded-Port        $NGINX_SERVER_PORT;
-		proxy_set_header X-Forwarded-Host        $host;
+    	proxy_set_header X-Forwarded-Port        $NGINX_SERVER_PORT;
+    	proxy_set_header X-Forwarded-Host        $host;
 		proxy_pass http://$NGINX_UPSTREAM_HOP:8080/;
 		error_log /var/log/hop_errors.log;
 	}
 }
 
-server {
-	listen 443 ssl;
-	server_name $NGINX_FRONTEND_DOMAIN_NAME;
-
-	ssl_certificate /etc/letsencrypt/live/$NGINX_FRONTEND_DOMAIN_NAME/fullchain.pem;
-	ssl_certificate_key /etc/letsencrypt/live/$NGINX_FRONTEND_DOMAIN_NAME/privkey.pem;
-
-	include /etc/letsencrypt/options-ssl-nginx.conf;
-	ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
-	client_max_body_size 100M;
-
-	location / {
-		proxy_pass http://$NGINX_UPSTREAM_FRONTEND:3000/;
-		error_log /var/log/front_end_errors.log;
-	}
-
-	location = /hop {
-		return 301 /hop/;
-	}
-
-	location /hop/ {
-		proxy_set_header Host                    $host;
-    	proxy_set_header X-Real-IP               $remote_addr;
-    	proxy_set_header X-Scheme                $NGINX_SCHEME;
-		proxy_set_header X-Forwarded-For         $proxy_add_x_forwarded_for;
-    	proxy_set_header X-Forwarded-Proto       $NGINX_SCHEME;
-		proxy_set_header X-Forwarded-Port        $NGINX_SERVER_PORT;
-		proxy_set_header X-Forwarded-Host        $host;
-		proxy_pass http://$NGINX_UPSTREAM_HOP:8080/;
-		error_log /var/log/hop_errors.log;
-	}
-}
+# SSL disabled for dev mode - uncomment for production
+# server {
+# 	listen 443 ssl;
+# 	server_name $NGINX_FRONTEND_DOMAIN_NAME;
+#
+# 	ssl_certificate /etc/letsencrypt/live/$NGINX_FRONTEND_DOMAIN_NAME/fullchain.pem;
+# 	ssl_certificate_key /etc/letsencrypt/live/$NGINX_FRONTEND_DOMAIN_NAME/privkey.pem;
+#
+# 	include /etc/letsencrypt/options-ssl-nginx.conf;
+# 	ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+# 	client_max_body_size 100M;
+#
+# 	location / {
+# 		proxy_pass http://$NGINX_UPSTREAM_FRONTEND:3000/;
+# 		error_log /var/log/front_end_errors.log;
+# 	}
+#
+# 	location = /hop {
+# 		return 301 /hop/;
+# 	}
+#
+# 	location /hop/ {
+# 		proxy_set_header Host                    $host;
+#     	proxy_set_header X-Real-IP               $remote_addr;
+#     	proxy_set_header X-Scheme                $NGINX_SCHEME;
+# 		proxy_set_header X-Forwarded-For         $proxy_add_x_forwarded_for;
+#     	proxy_set_header X-Forwarded-Proto       $NGINX_SCHEME;
+#     	proxy_set_header X-Forwarded-Port        $NGINX_SERVER_PORT;
+#     	proxy_set_header X-Forwarded-Host        $host;
+# 		proxy_pass http://$NGINX_UPSTREAM_HOP:8080/;
+# 		error_log /var/log/hop_errors.log;
+# 	}
+# }

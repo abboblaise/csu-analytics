@@ -4,8 +4,9 @@ import { useDropzone } from 'react-dropzone';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
-import { useUploadPipelineMutation } from '../pipeline';
+import { useUploadPipelineMutation, useGetAllPipelinesQuery } from '../pipeline';
 import { useTranslation } from 'react-i18next';
+import { skipToken } from '@reduxjs/toolkit/query/react';
 
 interface UploadPipelineProps {
   state: boolean;
@@ -42,8 +43,7 @@ export const UploadPipeline = ({
     formData.append('uploadedFile', file, file.name);
     uploadPipeline(formData).then((res: any) => {
       if (res.error) {
-        const { data } = res.error;
-        const { message } = data;
+        const message = res.error?.data?.message || 'Failed to upload pipeline';
         toast.error(message, { position: 'top-right' });
         return;
       }

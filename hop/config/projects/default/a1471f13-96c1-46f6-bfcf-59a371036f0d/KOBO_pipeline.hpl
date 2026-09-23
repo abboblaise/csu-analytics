@@ -1,0 +1,965 @@
+<pipeline>
+  <info>
+    <name>KOBO_pipeline</name>
+    <name_sync_with_filename>Y</name_sync_with_filename>
+    <description />
+    <extended_description />
+    <pipeline_version />
+    <pipeline_type>Normal</pipeline_type>
+    <parameters>
+    </parameters>
+    <capture_transform_performance>N</capture_transform_performance>
+    <transform_performance_capturing_delay>1000</transform_performance_capturing_delay>
+    <transform_performance_capturing_size_limit>100</transform_performance_capturing_size_limit>
+    <created_user>-</created_user>
+    <created_date>2025/07/18 11:50:35.134</created_date>
+    <modified_user>-</modified_user>
+    <modified_date>2025/07/18 11:50:35.134</modified_date>
+  </info>
+  <notepads>
+  </notepads>
+  <order>
+    <hop>
+      <from>HTTP client</from>
+      <to>JSON input</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>JSON input</from>
+      <to>Select values</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Select values</from>
+      <to>Select values 2</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Select values 2</from>
+      <to>Parquet File Output 2</to>
+      <enabled>Y</enabled>
+    </hop>
+  </order>
+  <transform>
+    <name>HTTP client</name>
+    <type>Http</type>
+    <description />
+    <distribute>Y</distribute>
+    <custom_distribution />
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name />
+    </partitioning>
+    <url>https://kobo.giz.de/api/v2/assets/aLGLPCChXvu66RewKmAQCN/data/?format=json</url>
+    <urlInField>N</urlInField>
+    <ignoreSsl>N</ignoreSsl>
+    <urlField>url</urlField>
+    <encoding>UTF-8</encoding>
+    <httpLogin />
+    <httpPassword>Encrypted </httpPassword>
+    <proxyHost />
+    <proxyPort />
+    <socketTimeout>10000</socketTimeout>
+    <connectionTimeout>10000</connectionTimeout>
+    <closeIdleConnectionsTime>-1</closeIdleConnectionsTime>
+    <lookup>
+    </lookup>
+    <result>
+      <name>result</name>
+      <code />
+      <response_time />
+      <response_header />
+    </result>
+    <attributes />
+    <GUI>
+      <xloc>480</xloc>
+      <yloc>224</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>JSON input</name>
+    <type>JsonInput</type>
+    <description />
+    <distribute>Y</distribute>
+    <custom_distribution />
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name />
+    </partitioning>
+    <include>N</include>
+    <include_field />
+    <rownum>N</rownum>
+    <addresultfile>N</addresultfile>
+    <readurl>N</readurl>
+    <removeSourceField>N</removeSourceField>
+    <IsIgnoreEmptyFile>N</IsIgnoreEmptyFile>
+    <doNotFailIfNoFile>Y</doNotFailIfNoFile>
+    <ignoreMissingPath>Y</ignoreMissingPath>
+    <defaultPathLeafToNull>Y</defaultPathLeafToNull>
+    <rownum_field />
+    <file>
+      <name />
+      <filemask />
+      <exclude_filemask />
+      <file_required>N</file_required>
+      <include_subfolders>N</include_subfolders>
+    </file>
+    <fields>
+      <field>
+        <name>Enter_a_date</name>
+        <path>$.results.*.start</path>
+        <type>String</type>
+        <format />
+        <currency />
+        <decimal />
+        <group />
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>__version__</name>
+        <path>$.results.*.__version__</path>
+        <type>String</type>
+        <format />
+        <currency />
+        <decimal />
+        <group />
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>_attachments</name>
+        <path>$.results.*._attachments</path>
+        <type>String</type>
+        <format />
+        <currency />
+        <decimal />
+        <group />
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>_geolocation</name>
+        <path>$.results.*._geolocation</path>
+        <type>String</type>
+        <format />
+        <currency />
+        <decimal />
+        <group />
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>_id</name>
+        <path>$.results.*._id</path>
+        <type>String</type>
+        <format />
+        <currency />
+        <decimal />
+        <group />
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>_notes</name>
+        <path>$.results.*._notes</path>
+        <type>String</type>
+        <format />
+        <currency />
+        <decimal />
+        <group />
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>_status</name>
+        <path>$.results.*._status</path>
+        <type>String</type>
+        <format />
+        <currency />
+        <decimal />
+        <group />
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>_submission_time</name>
+        <path>$.results.*._submission_time</path>
+        <type>String</type>
+        <format />
+        <currency />
+        <decimal />
+        <group />
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>_submitted_by</name>
+        <path>$.results.*._submitted_by</path>
+        <type>String</type>
+        <format />
+        <currency />
+        <decimal />
+        <group />
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>_tags</name>
+        <path>$.results.*._tags</path>
+        <type>String</type>
+        <format />
+        <currency />
+        <decimal />
+        <group />
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>_uuid</name>
+        <path>$.results.*._uuid</path>
+        <type>String</type>
+        <format />
+        <currency />
+        <decimal />
+        <group />
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>_validation_status</name>
+        <path>$.results.*._validation_status</path>
+        <type>String</type>
+        <format />
+        <currency />
+        <decimal />
+        <group />
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>_xform_id_string</name>
+        <path>$.results.*._xform_id_string</path>
+        <type>String</type>
+        <format />
+        <currency />
+        <decimal />
+        <group />
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>end</name>
+        <path>$.results.*.end</path>
+        <type>String</type>
+        <format />
+        <currency />
+        <decimal />
+        <group />
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>formhub/uuid</name>
+        <path>$.results.*.formhub/uuid</path>
+        <type>String</type>
+        <format />
+        <currency />
+        <decimal />
+        <group />
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>phase_implementation</name>
+        <path>$.results.*.group_yt9bd15/Phase_d_impl_mentation</path>
+        <type>String</type>
+        <format />
+        <currency />
+        <decimal />
+        <group />
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>activite</name>
+        <path>$.results.*.group_yt9bd15/Intitul_de_l_activit</path>
+        <type>String</type>
+        <format />
+        <currency />
+        <decimal />
+        <group />
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>domaine_intervention</name>
+        <path>$.results.*.group_yt9bd15/Domaine_d_intervention_strat_g</path>
+        <type>String</type>
+        <format />
+        <currency />
+        <decimal />
+        <group />
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>champ_action</name>
+        <path>$.results.*.group_yt9bd15/group_wi5qr49/Champ_d_action</path>
+        <type>String</type>
+        <format />
+        <currency />
+        <decimal />
+        <group />
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>mesure_de renforcement</name>
+        <path>$.results.*.group_yt9bd15/group_wi5qr49/Mesure_de_renforcement_de_capa</path>
+        <type>String</type>
+        <format />
+        <currency />
+        <decimal />
+        <group />
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>objectif_activite</name>
+        <path>$.results.*.group_yt9bd15/Objectif_de_l_activit</path>
+        <type>String</type>
+        <format />
+        <currency />
+        <decimal />
+        <group />
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>date_debut_planifie</name>
+        <path>$.results.*.group_yt9bd15/Date_de_d_but_planifi_e</path>
+        <type>String</type>
+        <format />
+        <currency />
+        <decimal />
+        <group />
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>date_realisation</name>
+        <path>$.results.*.group_yt9bd15/Date_de_r_alisation_de_l_activit</path>
+        <type>String</type>
+        <format />
+        <currency />
+        <decimal />
+        <group />
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>duree_activite</name>
+        <path>$.results.*.group_yt9bd15/Dur_e_de_l_activit_en_heure</path>
+        <type>String</type>
+        <format />
+        <currency />
+        <decimal />
+        <group />
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>lieu</name>
+        <path>$.results.*.group_yt9bd15/Lieu</path>
+        <type>String</type>
+        <format />
+        <currency />
+        <decimal />
+        <group />
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>parties_prenantes_organes_gou</name>
+        <path>$.results.*.group_yt9bd15/Parties_prenantes_Organes_gou</path>
+        <type>String</type>
+        <format />
+        <currency />
+        <decimal />
+        <group />
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>parties_prenantes_partenaires</name>
+        <path>$.results.*.group_yt9bd15/Parties_prenantes_Partenaires</path>
+        <type>String</type>
+        <format />
+        <currency />
+        <decimal />
+        <group />
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>source_financement</name>
+        <path>$.results.*.group_yt9bd15/Source_de_financement</path>
+        <type>String</type>
+        <format />
+        <currency />
+        <decimal />
+        <group />
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>resultats_obtenus</name>
+        <path>$.results.*.group_fr1xg06/Principaux_r_sultats_obtenus</path>
+        <type>String</type>
+        <format />
+        <currency />
+        <decimal />
+        <group />
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>nombre_personnes_activites</name>
+        <path>$.results.*.group_fr1xg06/Nombre_de_personnes_iqu_s_dans_l_activit</path>
+        <type>String</type>
+        <format />
+        <currency />
+        <decimal />
+        <group />
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>nombre_femme_activite</name>
+        <path>$.results.*.group_fr1xg06/Nombre_de_femmes_to_qu_es_dans_l_activit</path>
+        <type>String</type>
+        <format />
+        <currency />
+        <decimal />
+        <group />
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>nombre_homme_activite</name>
+        <path>$.results.*.group_fr1xg06/Nombre_d_hommes_tot_iqu_s_dans_l_activit</path>
+        <type>String</type>
+        <format />
+        <currency />
+        <decimal />
+        <group />
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>recommandations</name>
+        <path>$.results.*.group_fr1xg06/Recommandations_form_l_issue_de_l_activit</path>
+        <type>String</type>
+        <format />
+        <currency />
+        <decimal />
+        <group />
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>observations</name>
+        <path>$.results.*.group_zp1qq83/Observations_commentaires</path>
+        <type>String</type>
+        <format />
+        <currency />
+        <decimal />
+        <group />
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>contributions_enjeux</name>
+        <path>$.results.*.group_zp1qq83/Contribution_aux_obj_eurs_du_projet_OHDAA</path>
+        <type>String</type>
+        <format />
+        <currency />
+        <decimal />
+        <group />
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+    </fields>
+    <limit>0</limit>
+    <IsInFields>Y</IsInFields>
+    <IsAFile>N</IsAFile>
+    <valueField>result</valueField>
+    <shortFileFieldName />
+    <pathFieldName />
+    <hiddenFieldName />
+    <lastModificationTimeFieldName />
+    <uriNameFieldName />
+    <rootUriNameFieldName />
+    <extensionFieldName />
+    <sizeFieldName />
+    <attributes />
+    <GUI>
+      <xloc>640</xloc>
+      <yloc>192</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>Parquet File Output 2</name>
+    <type>ParquetFileOutput</type>
+    <description />
+    <distribute>Y</distribute>
+    <custom_distribution />
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name />
+    </partitioning>
+    <compression_codec>UNCOMPRESSED</compression_codec>
+    <data_page_size>8192</data_page_size>
+    <dictionary_page_size>1048576</dictionary_page_size>
+    <fields>
+      <field>
+        <source_field>Enter_a_date</source_field>
+        <target_field>date</target_field>
+      </field>
+      <field>
+        <source_field>version</source_field>
+        <target_field>version</target_field>
+      </field>
+      <field>
+        <source_field>id</source_field>
+        <target_field>id</target_field>
+      </field>
+      <field>
+        <source_field>_status</source_field>
+        <target_field>status</target_field>
+      </field>
+      <field>
+        <source_field>_submission_time</source_field>
+        <target_field>submission_time</target_field>
+      </field>
+      <field>
+        <source_field>_uuid</source_field>
+        <target_field>uuid</target_field>
+      </field>
+      <field>
+        <source_field>_xform_id_string</source_field>
+        <target_field>xform_id_string</target_field>
+      </field>
+      <field>
+        <source_field>end</source_field>
+        <target_field>end</target_field>
+      </field>
+      <field>
+        <source_field>activite</source_field>
+        <target_field>activite</target_field>
+      </field>
+      <field>
+        <source_field>champ_action</source_field>
+        <target_field>champ_action</target_field>
+      </field>
+      <field>
+        <source_field>contributions_enjeux</source_field>
+        <target_field>contributions_enjeux</target_field>
+      </field>
+      <field>
+        <source_field>date_debut_planifie</source_field>
+        <target_field>date_debut_planifie</target_field>
+      </field>
+      <field>
+        <source_field>date_realisation</source_field>
+        <target_field>date_realisation</target_field>
+      </field>
+      <field>
+        <source_field>domaine_intervention</source_field>
+        <target_field>domaine_intervention</target_field>
+      </field>
+      <field>
+        <source_field>duree_activite</source_field>
+        <target_field>duree_activite</target_field>
+      </field>
+      <field>
+        <source_field>mesure_de renforcement</source_field>
+        <target_field>mesure_renforcement</target_field>
+      </field>
+      <field>
+        <source_field>nombre_femme_activite</source_field>
+        <target_field>nombrefemme</target_field>
+      </field>
+      <field>
+        <source_field>nombre_homme_activite</source_field>
+        <target_field>nombre_homme_activite</target_field>
+      </field>
+      <field>
+        <source_field>nombre_personnes_activites</source_field>
+        <target_field>nombre_personnes_activites</target_field>
+      </field>
+      <field>
+        <source_field>objectif_activite</source_field>
+        <target_field>objectif_activite</target_field>
+      </field>
+      <field>
+        <source_field>observations</source_field>
+        <target_field>observations</target_field>
+      </field>
+      <field>
+        <source_field>parties_prenantes_organes_gou</source_field>
+        <target_field>parties_prenantes_organes_gou</target_field>
+      </field>
+      <field>
+        <source_field>parties_prenantes_partenaires</source_field>
+        <target_field>parties_prenantes_partenaires</target_field>
+      </field>
+      <field>
+        <source_field>phase_implementation</source_field>
+        <target_field>phase_implementation</target_field>
+      </field>
+      <field>
+        <source_field>recommandations</source_field>
+        <target_field>recommandations</target_field>
+      </field>
+      <field>
+        <source_field>resultats_obtenus</source_field>
+        <target_field>resultats_obtenus</target_field>
+      </field>
+      <field>
+        <source_field>source_financement</source_field>
+        <target_field>source_financement</target_field>
+      </field>
+      <field>
+        <source_field>_uuid</source_field>
+        <target_field>lieu</target_field>
+      </field>
+    </fields>
+    <filename_base>ftp://${minio_ftp}/parquets/${user_id}/${dag_display_name}</filename_base>
+    <filename_create_parent_folders>Y</filename_create_parent_folders>
+    <filename_datetime_format>yyyyMMdd-HHmmss</filename_datetime_format>
+    <filename_ext>parquet</filename_ext>
+    <filename_include_copy>N</filename_include_copy>
+    <filename_include_date>N</filename_include_date>
+    <filename_include_datetime>N</filename_include_datetime>
+    <filename_include_split>N</filename_include_split>
+    <filename_include_time>N</filename_include_time>
+    <filename_split_size>1000000</filename_split_size>
+    <row_group_size>268435456</row_group_size>
+    <version>2.0</version>
+    <attributes />
+    <GUI>
+      <xloc>1280</xloc>
+      <yloc>192</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>Select values</name>
+    <type>SelectValues</type>
+    <description />
+    <distribute>Y</distribute>
+    <custom_distribution />
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name />
+    </partitioning>
+    <fields>
+      <field>
+        <name>Enter_a_date</name>
+      </field>
+      <field>
+        <name>__version__</name>
+        <rename>version</rename>
+      </field>
+      <field>
+        <name>_attachments</name>
+      </field>
+      <field>
+        <name>_geolocation</name>
+      </field>
+      <field>
+        <name>_id</name>
+        <rename>id</rename>
+      </field>
+      <field>
+        <name>_notes</name>
+      </field>
+      <field>
+        <name>_status</name>
+      </field>
+      <field>
+        <name>_submission_time</name>
+      </field>
+      <field>
+        <name>_submitted_by</name>
+      </field>
+      <field>
+        <name>_tags</name>
+      </field>
+      <field>
+        <name>_uuid</name>
+      </field>
+      <field>
+        <name>_validation_status</name>
+      </field>
+      <field>
+        <name>_xform_id_string</name>
+      </field>
+      <field>
+        <name>end</name>
+      </field>
+      <field>
+        <name>formhub/uuid</name>
+      </field>
+      <field>
+        <name>activite</name>
+      </field>
+      <field>
+        <name>champ_action</name>
+      </field>
+      <field>
+        <name>contributions_enjeux</name>
+      </field>
+      <field>
+        <name>date_debut_planifie</name>
+      </field>
+      <field>
+        <name>date_realisation</name>
+      </field>
+      <field>
+        <name>domaine_intervention</name>
+      </field>
+      <field>
+        <name>duree_activite</name>
+      </field>
+      <field>
+        <name>mesure_de renforcement</name>
+      </field>
+      <field>
+        <name>nombre_femme_activite</name>
+      </field>
+      <field>
+        <name>nombre_homme_activite</name>
+      </field>
+      <field>
+        <name>nombre_personnes_activites</name>
+      </field>
+      <field>
+        <name>objectif_activite</name>
+      </field>
+      <field>
+        <name>observations</name>
+      </field>
+      <field>
+        <name>parties_prenantes_organes_gou</name>
+      </field>
+      <field>
+        <name>parties_prenantes_partenaires</name>
+      </field>
+      <field>
+        <name>phase_implementation</name>
+      </field>
+      <field>
+        <name>recommandations</name>
+      </field>
+      <field>
+        <name>resultats_obtenus</name>
+      </field>
+      <field>
+        <name>source_financement</name>
+      </field>
+      <field>
+        <name>lieu</name>
+      </field>
+      <select_unspecified>N</select_unspecified>
+    </fields>
+    <attributes />
+    <GUI>
+      <xloc>864</xloc>
+      <yloc>192</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>Select values 2</name>
+    <type>SelectValues</type>
+    <description />
+    <distribute>Y</distribute>
+    <custom_distribution />
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name />
+    </partitioning>
+    <fields>
+      <select_unspecified>N</select_unspecified>
+      <meta>
+        <name>Enter_a_date</name>
+        <rename>Enter_a_date</rename>
+        <type>Date</type>
+        <length>-2</length>
+        <precision>-2</precision>
+        <conversion_mask>yyyy-MM-dd</conversion_mask>
+        <date_format_lenient>false</date_format_lenient>
+        <date_format_locale />
+        <date_format_timezone />
+        <lenient_string_to_number>false</lenient_string_to_number>
+        <encoding />
+        <decimal_symbol />
+        <grouping_symbol />
+        <currency_symbol />
+        <storage_type />
+      </meta>
+      <meta>
+        <name>_submission_time</name>
+        <rename>_submission_time</rename>
+        <type>Date</type>
+        <length>-2</length>
+        <precision>-2</precision>
+        <conversion_mask>yyyy-MM-dd</conversion_mask>
+        <date_format_lenient>false</date_format_lenient>
+        <date_format_locale />
+        <date_format_timezone />
+        <lenient_string_to_number>false</lenient_string_to_number>
+        <encoding />
+        <decimal_symbol />
+        <grouping_symbol />
+        <currency_symbol />
+        <storage_type />
+      </meta>
+      <meta>
+        <name>date_debut_planifie</name>
+        <rename>date_debut_planifie</rename>
+        <type>Date</type>
+        <length>-2</length>
+        <precision>-2</precision>
+        <conversion_mask>yyyy-MM-dd</conversion_mask>
+        <date_format_lenient>false</date_format_lenient>
+        <date_format_locale />
+        <date_format_timezone />
+        <lenient_string_to_number>false</lenient_string_to_number>
+        <encoding />
+        <decimal_symbol />
+        <grouping_symbol />
+        <currency_symbol />
+        <storage_type />
+      </meta>
+      <meta>
+        <name>date_realisation</name>
+        <rename>date_realisation</rename>
+        <type>Date</type>
+        <length>-2</length>
+        <precision>-2</precision>
+        <conversion_mask>yyyy-MM-dd</conversion_mask>
+        <date_format_lenient>false</date_format_lenient>
+        <date_format_locale />
+        <date_format_timezone />
+        <lenient_string_to_number>false</lenient_string_to_number>
+        <encoding />
+        <decimal_symbol />
+        <grouping_symbol />
+        <currency_symbol />
+        <storage_type />
+      </meta>
+      <meta>
+        <name>end</name>
+        <rename>end</rename>
+        <type>Date</type>
+        <length>-2</length>
+        <precision>-2</precision>
+        <conversion_mask>yyyy-MM-dd</conversion_mask>
+        <date_format_lenient>false</date_format_lenient>
+        <date_format_locale />
+        <date_format_timezone />
+        <lenient_string_to_number>false</lenient_string_to_number>
+        <encoding />
+        <decimal_symbol />
+        <grouping_symbol />
+        <currency_symbol />
+        <storage_type />
+      </meta>
+    </fields>
+    <attributes />
+    <GUI>
+      <xloc>1056</xloc>
+      <yloc>192</yloc>
+    </GUI>
+  </transform>
+  <transform_error_handling>
+  </transform_error_handling>
+  <attributes />
+</pipeline>

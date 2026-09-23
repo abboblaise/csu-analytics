@@ -22,35 +22,38 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", get_random_secret_key())
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
-CORS_ORIGIN_ALLOW_ALL = False
+CORS_ALLOW_ALL_ORIGINS = env.bool("CORS_ORIGIN_ALLOW_ALL", default=False)
+CORS_ORIGIN_ALLOW_ALL = CORS_ALLOW_ALL_ORIGINS
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = []
 CORS_ALLOWED_ORIGINS = [
-    "https://home.psfpad.com",
-    "http://home.psfpad.com:8085",
-    "https://home.psfpad.com:8085",
-    "http://home.psfpad.com",
+    "https://home.sivadcsu.minsante.cm",
+    "https://data.sivadcsu.minsante.cm",
+    "https://auth.sivadcsu.minsante.cm",
+    "https://analytics.sivadcsu.minsante.cm",
+    "https://guest.analytics.sivadcsu.minsante.cm",
+    "https://cache.sivadcsu.minsante.cm",
+    "https://console.cache.sivadcsu.minsante.cm",
+    "https://orchestration.sivadcsu.minsante.cm",
+    "https://home.5-180-182-81.cloud-xip.com",
+    "https://data.5-180-182-81.cloud-xip.com",
+    "https://auth.5-180-182-81.cloud-xip.com",
+    "https://analytics.5-180-182-81.cloud-xip.com",
+    "https://guest.analytics.5-180-182-81.cloud-xip.com",
+    "https://cache.5-180-182-81.cloud-xip.com",
+    "https://console.cache.5-180-182-81.cloud-xip.com",
+    "https://orchestration.5-180-182-81.cloud-xip.com",
+    "http://home.5-180-182-81.cloud-xip.com",
+    "http://data.5-180-182-81.cloud-xip.com",
+    "http://home.sivadcsu.minsante.cm:8085",
+    "https://home.sivadcsu.minsante.cm:8085",
+    "http://home.sivadcsu.minsante.cm",
     "http://localhost:8085",
     "http://localhost:3000",
-]
-CORS_ALLOWED_METHODS = [
-    'DELETE',
-    'GET',
-    'OPTIONS',
-    'PATCH', 
-    'POST',
-    'PUT',
-]
-CORS_ALLOWED_HEADERS = [
-    'accept',
-    'accept-encoding',
-    'authorization',
-    'content-type',
-    'dnt',
-    'origin',
-    'user-agent',
-    'x-csrftoken',
-    'x-requested-with',
+    "http://localhost:8000",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:8085",
+    "http://127.0.0.1:8000",
 ]
 # Application definition
 
@@ -69,7 +72,6 @@ INSTALLED_APPS = [
     "hop",
     "rest_framework.authtoken",
     "rest_framework",
-    "corsheaders",
     "drf_yasg",
     "storages",
     "rest_framework_swagger"
@@ -78,7 +80,6 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -191,12 +192,33 @@ REST_FRAMEWORK = {
 
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://home.psfpad.com",
-    "http://home.psfpad.com:8085",
-    "https://home.psfpad.com:8085",
-    "http://home.psfpad.com",
+    "https://home.sivadcsu.minsante.cm",
+    "https://data.sivadcsu.minsante.cm",
+    "https://auth.sivadcsu.minsante.cm",
+    "https://analytics.sivadcsu.minsante.cm",
+    "https://guest.analytics.sivadcsu.minsante.cm",
+    "https://cache.sivadcsu.minsante.cm",
+    "https://console.cache.sivadcsu.minsante.cm",
+    "https://orchestration.sivadcsu.minsante.cm",
+    "https://home.5-180-182-81.cloud-xip.com",
+    "https://data.5-180-182-81.cloud-xip.com",
+    "https://auth.5-180-182-81.cloud-xip.com",
+    "https://analytics.5-180-182-81.cloud-xip.com",
+    "https://guest.analytics.5-180-182-81.cloud-xip.com",
+    "https://cache.5-180-182-81.cloud-xip.com",
+    "https://console.cache.5-180-182-81.cloud-xip.com",
+    "https://orchestration.5-180-182-81.cloud-xip.com",
+    "http://home.5-180-182-81.cloud-xip.com",
+    "http://data.5-180-182-81.cloud-xip.com",
+    "http://home.sivadcsu.minsante.cm:8085",
+    "https://home.sivadcsu.minsante.cm:8085",
+    "http://home.sivadcsu.minsante.cm",
     "http://localhost:8085",
     "http://localhost:3000",
+    "http://localhost:8000",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:8085",
+    "http://127.0.0.1:8000",
 ]
 
 # Excempt list - URL paths that doesn't need Keycloak Authorization

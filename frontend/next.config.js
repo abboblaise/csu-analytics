@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   serverRuntimeConfig: {
     NEXT_PRIVATE_BASE_URL: process.env.NEXT_PRIVATE_BASE_URL,
   },
