@@ -29,7 +29,7 @@ export const DashboardList = () => {
           className="bg-prim hover:bg-prim-hover border-0 h-10"
           onClick={() => {
             window.open(
-              `${publicRuntimeConfig.NEXT_PUBLIC_SUPERSET_URL}/dashboard/list`,
+              `${publicRuntimeConfig.NEXT_PUBLIC_SUPERSET_GUEST_URL}/dashboard/list`,
               '_blank'
             );
           }}

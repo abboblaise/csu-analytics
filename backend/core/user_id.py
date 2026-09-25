@@ -19,9 +19,14 @@ class UserIdMiddleware:
         if hasattr(request, 'userinfo'):
             _thread_locals.user_name = request.userinfo['preferred_username']
             _thread_locals.user_id = request.userinfo['sub']
+            auth_header = request.META.get('HTTP_AUTHORIZATION', '').split()
+            _thread_locals.user_token = auth_header[-1] if auth_header else None
 
 def get_current_user_id() -> Union[str, None]:
     return getattr(_thread_locals, 'user_id', None)
 
 def get_current_user_name() -> Union[str, None]:
     return getattr(_thread_locals, 'user_name', None)
+
+def get_current_user_token() -> Union[str, None]:
+    return getattr(_thread_locals, 'user_token', None)

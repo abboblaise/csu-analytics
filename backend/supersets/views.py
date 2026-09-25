@@ -115,7 +115,7 @@ class EnableEmbed(SupersetAPI):
 
         response = requests.post(
             url,
-            json={"allowed_domains": [os.getenv("SUPERSET_ALLOWED_DOMAINS")]},
+            json={"allowed_domains": [d.strip() for d in os.getenv("SUPERSET_ALLOWED_DOMAINS", "").split(",") if d.strip()]},
             headers=headers,
         )
 

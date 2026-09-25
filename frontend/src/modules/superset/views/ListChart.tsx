@@ -92,7 +92,7 @@ const ChartList = ({ filterByDagId = '' }: ChartListProps) => {
           className="bg-prim hover:bg-prim-hover border-0 h-10"
           onClick={() => {
             window.open(
-              `${publicRuntimeConfig.NEXT_PUBLIC_SUPERSET_URL}/chart/list`,
+              `${publicRuntimeConfig.NEXT_PUBLIC_SUPERSET_GUEST_URL}/chart/list`,
               '_blank'
             );
           }}
@@ -145,7 +145,7 @@ const ChartList = ({ filterByDagId = '' }: ChartListProps) => {
                     <TableCell>
                       <Link
                         style={{ textDecoration: 'underline' }}
-                        href={`${process.env.NEXT_PUBLIC_SUPERSET_URL}${
+                        href={`${process.env.NEXT_PUBLIC_SUPERSET_GUEST_URL}${
                           item.slice_url || '#'
                         }`}
                         target="_blank"

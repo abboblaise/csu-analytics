@@ -1,6 +1,6 @@
-from core.user_id import get_current_user_name
+from core.user_id import get_current_user_token
 import logging
-import os
+from keycloak import KeycloakPostError
 from utils.keycloak_auth import get_keycloak_openid
 try:
     from threading import local
@@ -29,15 +29,11 @@ class KeycloakImpersonationMiddleware:
             oid.logout(session)
 
 def get_auth_token ():
-    keycloak = get_keycloak_openid()
-    tokens = keycloak.token(
-        grant_type=["urn:ietf:params:oauth:grant-type:token-exchange"],
-        client_id=os.getenv("APP_CLIENT_ID"),
-        client_secret=os.getenv("APP_SECRET_KEY"),
-        requested_subject=get_current_user_name(),
-        requested_token_type="urn:ietf:params:oauth:token-type:refresh_token"
-    )
-    sessions = getattr(_thread_locals, "keycloak_sessions", [])
-    sessions.append(tokens["refresh_token"])
-    _thread_locals.sessions = sessions
-    return tokens
+    # Keycloak 26 broke the direct (client-credentials) token-exchange impersonation used
+    # previously (NPE in the permission check) and refuses to impersonate users holding admin
+    # roles. The caller's own access token, already validated by the Keycloak middleware and
+    # issued for the same client, is equivalent for Superset, so reuse it instead.
+    token = get_current_user_token()
+    if token is None:
+        raise KeycloakPostError(response_code=401, error_message="No user token available")
+    return {"access_token": token}

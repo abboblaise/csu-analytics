@@ -1851,6 +1851,18 @@
             "claim.name": "clientId",
             "jsonType.label": "String"
           }
+        },
+        {
+          "name": "frontend-audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "consentRequired": false,
+          "config": {
+            "included.client.audience": "frontend",
+            "id.token.claim": "false",
+            "access.token.claim": "true",
+            "introspection.token.claim": "true"
+          }
         }
       ],
       "defaultClientScopes": [
@@ -2126,11 +2138,20 @@
       "secret": "LmY5vXE9gqU4JzP2wRfKa1tNvGiCM0uQ",
       "redirectUris": [
         "https://analytics.sivadcsu.minsante.cm/oauth-authorized/keycloak",
-        "https://analytics.sivadcsu.minsante.cm/oauth-authorized/keycloak",
         "http://analytics.sivadcsu.minsante.cm/oauth-authorized/keycloak",
-        "https://analytics.sivadcsu.minsante.cm/*"
+        "https://analytics.sivadcsu.minsante.cm/*",
+        "http://analytics.sivadcsu.minsante.cm/*",
+        "https://guest.analytics.sivadcsu.minsante.cm/oauth-authorized/keycloak",
+        "http://guest.analytics.sivadcsu.minsante.cm/oauth-authorized/keycloak",
+        "https://guest.analytics.sivadcsu.minsante.cm/*",
+        "http://guest.analytics.sivadcsu.minsante.cm/*"
       ],
-      "webOrigins": ["https://analytics.sivadcsu.minsante.cm"],
+      "webOrigins": [
+        "https://analytics.sivadcsu.minsante.cm",
+        "http://analytics.sivadcsu.minsante.cm",
+        "https://guest.analytics.sivadcsu.minsante.cm",
+        "http://guest.analytics.sivadcsu.minsante.cm"
+      ],
       "notBefore": 0,
       "bearerOnly": false,
       "consentRequired": false,
@@ -2149,7 +2170,9 @@
         "display.on.consent.screen": "false",
         "oauth2.device.authorization.grant.enabled": "false",
         "backchannel.logout.revoke.offline.tokens": "false",
-        "frontchannel.logout.url": "https://analytics.sivadcsu.minsante.cm/backchannel-logout/"
+        "frontchannel.logout.url": "https://analytics.sivadcsu.minsante.cm/backchannel-logout/",
+        "exclude.session.state.from.auth.response": "true",
+        "exclude.issuer.from.auth.response": "true"
       },
       "authenticationFlowBindingOverrides": {},
       "fullScopeAllowed": true,

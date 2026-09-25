@@ -8,6 +8,7 @@ from flask_appbuilder.security.sqla.models import (
 import jose
 from flask import Request
 from flask_appbuilder.views import expose
+from werkzeug.datastructures import ImmutableMultiDict
 from werkzeug.wrappers import Response as WerkzeugResponse
 from flask import flash, redirect, request, session, g
 from flask_appbuilder._compat import as_unicode
@@ -50,7 +51,9 @@ OAUTH_PROVIDERS = [
             "client_secret": SUPERSET_KEYCLOAK_CLIENT_SECRET,
             "api_base_url": f"{SUPERSET_KEYCLOAK_INTERNAL_URL}/realms/{SUPERSET_KEYCLOAK_APP_REALM}/protocol/openid-connect",
             "client_kwargs": {
-                "scope": "openid email profile offline_access roles"
+                # No `offline_access`: with Keycloak 26 it yields an offline-only session, invisible
+                # to the SSO check in `before_request` (get_sessions), which then logs the user out.
+                "scope": "openid email profile roles"
             },
             "access_token_url": f"{SUPERSET_KEYCLOAK_INTERNAL_URL}/realms/{SUPERSET_KEYCLOAK_APP_REALM}/protocol/openid-connect/token",
             "authorize_url": f"{SUPERSET_KEYCLOAK_EXTERNAL_URL}/realms/{SUPERSET_KEYCLOAK_APP_REALM}/protocol/openid-connect/auth",
@@ -75,6 +78,23 @@ JWT_PUBLIC_KEY = "-----BEGIN PUBLIC KEY-----\n" + keycloak_openid.public_key() +
 # Will allow user self registration, allowing to create Flask users from Authorized User
 AUTH_USER_REGISTRATION = True
 TALISMAN_ENABLED = False
+
+# The public reverse proxy adds `X-Frame-Options: SAMEORIGIN` to every response, which blocks
+# embedding dashboards in the frontend. Browsers ignore X-Frame-Options when a CSP
+# `frame-ancestors` directive is present, so emit one listing the allowed embedding origins.
+SUPERSET_FRAME_ANCESTORS = [o.strip() for o in os.getenv('SUPERSET_FRAME_ANCESTORS', '').split(',') if o.strip()]
+
+def FLASK_APP_MUTATOR(app):
+    if not SUPERSET_FRAME_ANCESTORS:
+        return
+
+    @app.after_request
+    def add_frame_ancestors(response):
+        response.headers.setdefault(
+            'Content-Security-Policy',
+            "frame-ancestors 'self' " + ' '.join(SUPERSET_FRAME_ANCESTORS),
+        )
+        return response
 AUTH_ROLES_SYNC_AT_LOGIN = True
 AUTH_ROLES_MAPPING = {
     "superset_admin": ["Admin"],
@@ -105,6 +125,20 @@ REPAN_JWT_USER_MAPPING = dict(
 logger = logging.getLogger(__name__)
 
 class CustomAuthOAuthView(AuthOAuthView):
+    @expose("/login/")
+    @expose("/login/<provider>")
+    def login(self, provider: Optional[str] = None) -> WerkzeugResponse:
+        # Keep "next" out of the OAuth state: Keycloak echoes the state in both the Location header and the
+        # KC_RESTART cookie, which can push its response headers past the front proxy's 4 KB limit (502).
+        if provider is not None:
+            session.pop("oauth_next", None)
+            if "next" in request.args:
+                session["oauth_next"] = request.args["next"]
+                request.args = ImmutableMultiDict(
+                    [(k, v) for k, v in request.args.items(multi=True) if k != "next"]
+                )
+        return super().login(provider)
+
     @expose("/oauth-authorized/<provider>")
     def oauth_authorized(self, provider: str) -> WerkzeugResponse:
         log.debug("Authorized init")
@@ -173,10 +207,13 @@ class CustomAuthOAuthView(AuthOAuthView):
 
             login_user(user)
             next_url = self.appbuilder.get_url_for_index
-            # Check if there is a next url on state
-            if "next" in state and len(state["next"]) > 0:
+            # Check if there is a next url in the session (see login) or on state
+            stored_next = session.pop("oauth_next", None)
+            if not stored_next and "next" in state and len(state["next"]) > 0:
+                stored_next = state["next"][0]
+            if stored_next:
                 # Need to run it through html.unescape because Flask will encode `&` in query params as `&amp;`
-                next_url = get_safe_redirect(html.unescape(state["next"][0]))
+                next_url = get_safe_redirect(html.unescape(stored_next))
             return redirect(next_url)
 
 class CustomSupersetSecurityManager(SupersetSecurityManager):
