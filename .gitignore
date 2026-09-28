@@ -18,3 +18,6 @@ node_modules/
 # Druid storage
 storage/indexing-logs/
 storage/segments/
+
+# Local database dumps (contain credentials)
+backups/

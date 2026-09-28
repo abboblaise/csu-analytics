@@ -28,7 +28,7 @@ export default function Layout({ children }: LayoutProps) {
         <div className={`mt-16`}>
           {!isTabletOrMobile && <SideBar isOpen={isOpen} />}
           <Drawer
-            title="COHIS"
+            title="CSU ANA"
             placement="left"
             isOpen={showMobileNav}
             onClose={() => setShowMobileNav(false)}
@@ -38,7 +38,7 @@ export default function Layout({ children }: LayoutProps) {
                 <div className="px-4 flex items-center justify-center flex-col mx-4 my-auto">
                   <img
                     className={`w-24 h-auto py-4`}
-                    src="/cohis.png"
+                    src="/csu_ana.png"
                     alt="company-logo"
                   />
                 </div>

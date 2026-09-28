@@ -1,8 +1,8 @@
 {
   "id": "c89b3c58-aefb-4429-972b-feccb6a77750",
   "realm": "regional-pandemic-analytics",
-  "displayName": "Cameroon One Health Information System",
-  "displayNameHtml": "<div style=\"font-family: 'Inter', sans-serif; color: #31713b; padding: 10px; border-radius: 5px; text-align: center;\">COHIS (Cameroon One Health Information System)</div>",
+  "displayName": "Universal Health Coverage Analytics",
+  "displayNameHtml": "<div style=\"font-family: 'Inter', sans-serif; color: #31713b; padding: 10px; border-radius: 5px; text-align: center;\">CSU ANA (Universal Health Coverage Analytics)</div>",
   "notBefore": 0,
   "defaultSignatureAlgorithm": "RS256",
   "revokeRefreshToken": false,
